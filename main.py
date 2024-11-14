@@ -7,7 +7,7 @@ from ventana_consulta import *
 
 
 def informes():
-    Ventana_consulta(principal)
+    ventana_consulta = Ventana_consulta(principal)
     
 def nominas():
     print("Nominas")

@@ -1,4 +1,5 @@
 import sqlite3
+from empleado import Empleado
 class DataBase:
     def __init__(self):
         self.conexion = sqlite3.connect("empleados.db")
@@ -82,10 +83,35 @@ class DataBase:
         self.__close__()
         
     def buscar_empleado(self, codigo):
-        self.__open__
+        self.__open__()
         self.cursor.execute("SELECT * FROM empleados WHERE id = ?", (codigo,))
-        empleado = self.cursor.fetchone()
-        self.__close__
+        datos_empleado = self.cursor.fetchone()
+        self.__close__()
+        
+        if datos_empleado is None:
+            return None
+        
+        empleado = Empleado(
+        id=datos_empleado[0],
+        apellido_nombre=datos_empleado[1],
+        fecha_inicio=datos_empleado[2],
+        fecha_nacimiento=datos_empleado[3],
+        direccion=datos_empleado[4],
+        nif=datos_empleado[5],
+        datos_bancarios=datos_empleado[6],
+        numero_seguro_social=datos_empleado[7],
+        genero=datos_empleado[8],
+        departamento=datos_empleado[9],
+        puesto=datos_empleado[10],
+        telefono=datos_empleado[11],
+        email=datos_empleado[12],
+        salario_mensual=datos_empleado[13],
+        paga_extra=datos_empleado[14],
+        irpf=datos_empleado[15],
+        seg_social=datos_empleado[16],
+        fecha_baja=datos_empleado[17]
+    )
+        
         return empleado
        
      
