@@ -121,20 +121,6 @@ class Ventana_alta():
     def confirmar(self):
        if self.validarCampos():
             emp = Empleado(
-            # apellido_nombre=self.apellido_nombre.get(),
-            # salario_mensual=self.salario_mensual.get(),
-            # telefono=self.telefono.get(),
-            # email=self.email.get(),
-            # fecha_inicio="2020-01-01",
-            # fecha_nacimiento=self.fecha_nacimiento.get(),
-            # direccion= self.direccion.get(),
-            # nif= self.nif.get(),
-            # datos_bancarios= self.datos_bancarios.get(),
-            # numero_seguro_social= self.numero_seguro_social.get(),
-            # genero= self.genero.get(),
-            # departamento= self.departamento.get(),
-            # puesto= self.puesto.get(),
-            # paga_extra= self.paga_extra.get()
             apellido_nombre=self.apellido_nombre.get(),                
             salario_mensual=self.salario_mensual.get(),                     
             telefono=self.telefono.get(),                          
@@ -254,7 +240,7 @@ class Ventana_alta():
             errores.append("Seguro Social")
 
         if errores:
-            mensaje_error = "\n".join(errores)  # Une todos los errores con un salto de línea
+            mensaje_error = "\n".join(errores)  
             self.validacions.set(mensaje_error)
             return False
         else:

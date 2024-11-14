@@ -2,10 +2,12 @@ from tkinter import *
 from data_base import *
 from ventana_baja import *
 from ventana_alta import *
+from ventana_consulta import *
+
 
 
 def informes():
-    print("Informes")
+    Ventana_consulta(principal)
     
 def nominas():
     print("Nominas")
