@@ -26,10 +26,9 @@ class DataBase:
         )"""
         ) 
         self.conexion.commit()
-        self.conexion.close()
+        
         
     def __close__(self):
-        self.conexion.commit()
         self.conexion.close()
         
     def __open__(self):
@@ -39,7 +38,6 @@ class DataBase:
     def insertar(self,empleado):
         try:
             self.__open__()
-            # Insert statement with placeholders for the values
             self.cursor.execute("""
                 INSERT INTO empleados 
                 (apellido_nombre, fecha_inicio, fecha_nacimiento, direccion, nif, datos_bancarios, 
@@ -63,7 +61,6 @@ class DataBase:
                 empleado.irpf,
                 empleado.seg_social
             ))
-        
             self.conexion.commit()
         except sqlite3.OperationalError as e:
             print(f"SQLite OperationalError: {e}")
@@ -193,5 +190,10 @@ class DataBase:
         
     def darbaja_empleado(self, codigo , fecha_baja):
         self.__open__()
-        self.cursor.execute("UPDATE empleados SET fecha_baja = ? WHERE id = ?", (fecha_baja, codigo))
-        self.__close__()
+        try:
+            self.cursor.execute("UPDATE empleados SET fecha_baja = ? WHERE id = ?", (fecha_baja, codigo))
+            self.conexion.commit()
+        except sqlite3.OperationalError as e:
+            print(f"SQLite OperationalError: {e}")
+        finally:
+            self.__close__()

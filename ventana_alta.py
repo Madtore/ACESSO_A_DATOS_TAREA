@@ -148,54 +148,9 @@ class Ventana_alta():
             print(emp)
             db = DataBase()
             db.insertar(emp)
-            db.__close__()
+
        
        
-    
-    # def validarCampos(self):
-    #     validador = Validador()
-    #     error = []
-        
-    #     if not validador.validadorGeneral(self.apellido_nombre.get()):
-    #         error.append("Apellido y Nombre")
-    #         self.ventana.nametowidget(self.validacions).config(fg="red")
-        
-    #     if not validador.validadorFecha(self.fecha_nacimiento.get()):
-    #         error.append("Fecha de Nacimiento")
-        
-    #     if not validador.validadorTelefono(self.telefono.get()):
-    #         error.append("Telefono")
-        
-    #     if not validador.validaraSalario(self.salario_mensual.get()):
-    #         error.append("Salario Mensual")
-        
-    #     if not validador.validarGenero(self.genero.get()):
-    #         error.append("Genero")
-        
-    #     if not validador.validarEmail(self.email.get()):
-    #         error.append("Email")
-        
-    #     if not validador.validadorGeneral(self.irpf.get()):
-    #         error.append("IRPF")
-        
-    #     if not validador.validadorGeneral(self.paga_extra.get()):
-    #         error.append("Paga Extra")
-        
-    #     if not validador.validadorGeneral(self.seg_social.get()):
-    #         error.append("Seguro Social")
-            
-    #     if errores:
-    #         # Concatenar los errores y cambiamos el color del texto a rojo
-    #         mensaje_error = "\n".join(errores)  # Une todos los errores con un salto de línea
-    #         self.validacions.set(mensaje_error)
-    #         self.ventana.nametowidget(self.validacions).config(fg="red")  # Cambia el color a rojo
-    #         return False
-    #     else:
-    #         # Si no hay errores, restablecer el color del texto a negro y mostrar mensaje de éxito
-    #         self.validacions.set("Todos los campos son válidos.")
-    #         self.ventana.nametowidget(self.validacions).config(fg="green")  # Cambiar color a verde
-    #         return True
-        
             
         
     def validarCampos(self):
@@ -214,13 +169,13 @@ class Ventana_alta():
         if not validador.validadorGeneral(self.direccion.get()):
             errores.append("Dirección")
 
-        if not validador.validadorGeneral(self.nif.get()):
+        if not validador.validar_nif(self.nif.get()):
             errores.append("NIF")
 
-        if not validador.validadorGeneral(self.datos_bancarios.get()):
+        if not validador.validar_ccc(self.datos_bancarios.get()):
             errores.append("Datos Bancarios")
 
-        if not validador.validadorGeneral(self.numero_seguro_social.get()):
+        if not validador.validar_naf(self.numero_seguro_social.get()):
             errores.append("Seguro Social")
             
         if not validador.validadorTelefono(self.telefono.get()):
