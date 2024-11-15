@@ -4,6 +4,7 @@ from tkcalendar import DateEntry
 from validador import Validador
 from data_base import *
 from empleado import *
+from tkinter import messagebox
 
 
 
@@ -200,7 +201,8 @@ class Ventana_alta():
             errores.append("Seguro Social")
 
         if errores:
-            mensaje_error = "\n".join(errores)  
+            mensaje_error = "\n".join(errores)
+            messagebox.showerror("Validación de campos", mensaje_error)  
             self.validacions.set(mensaje_error)
             return False
         else:
