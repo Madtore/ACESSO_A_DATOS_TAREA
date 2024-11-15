@@ -1,6 +1,7 @@
 from tkinter import *
 from data_base import *
 from empleado import *
+from tkcalendar import DateEntry
 
 class Ventana_baja():
     def __init__(self, ventana_principal  ):
@@ -25,7 +26,7 @@ class Ventana_baja():
         self.Entry_codigo.grid(row=3, column=1, columnspan=4, pady=10, sticky="EW")
         
         Label(self.ventana, text="Fecha de baja", font=("Arial", 15)).grid(row=2, column=7, columnspan=4, pady=10, padx=10, sticky="EW")
-        self.Entry_fecha_baja = Entry(self.ventana, textvariable=self.fecha_baja)
+        self.Entry_fecha_baja = DateEntry(self.ventana, textvariable=self.fecha_baja)
         self.Entry_fecha_baja.grid(row=3, column=7, columnspan=4, pady=10, sticky="EW")
 
        
@@ -60,11 +61,11 @@ class Ventana_baja():
         db = DataBase()
         
         
-        if db.buscar_empleado(codigo) == None:
+        if not db.existe_empleado(codigo):
             self.validacions.set("El empleado no existe")
             return
         
-        Empleado.darbaja(codigo,fecha_baja)
+        db.darbaja_empleado(codigo,fecha_baja)
         
         self.validacions.set("El empleado cod:{} ha sido dado de baja en fecha: {}".format(codigo,fecha_baja))
         return

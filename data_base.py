@@ -29,6 +29,7 @@ class DataBase:
         self.conexion.close()
         
     def __close__(self):
+        self.conexion.commit()
         self.conexion.close()
         
     def __open__(self):
@@ -71,16 +72,6 @@ class DataBase:
         finally:
             self.__close__()
       
-   
-    def darbaja(self, empleado, fecha_baja):
-        self.__open__()
-        self.cursor.execute("""
-                            UPDATE empleados
-                            SET fecha_baja = ?
-                            WHERE id = ?
-                            """, fecha_baja, empleado)
-        self.conexion.commit()
-        self.__close__()
         
     def buscar_empleado(self, codigo):
         self.__open__()
@@ -116,9 +107,91 @@ class DataBase:
        
      
         
+    def listar_empleados(self):
+        self.__open__()
+        self.cursor.execute("SELECT * FROM empleados")
+        empleados = self.cursor.fetchall()
+        self.__close__()
+        return empleados
+    
+    
+    def num_empleados_alta(self):
+        self.__open__()
+        self.cursor.execute("""
+                            SELECT 
+                                COUNT(id) AS numtotal, 
+                                ROUND(SUM(CASE WHEN genero = 'hombre' THEN 1 ELSE 0 END) * 100.0 / COUNT(id), 2) AS porcentaje_hombres, 
+                                ROUND(SUM(CASE WHEN genero = 'mujer' THEN 1 ELSE 0 END) * 100.0 / COUNT(id), 2) AS porcentaje_mujeres 
+                                FROM empleados 
+                                WHERE fecha_baja IS NULL;
+                            """)
+        num = self.cursor.fetchall()
+        self.__close__()
+        return [num[0][0],num[0][1],num[0][2]]
+    
+    
+    def num_empleados_baja(self):
+        self.__open__()
+        self.cursor.execute("""
+                            SELECT 
+                                COUNT(id) AS numtotal, 
+                                ROUND(SUM(CASE WHEN genero = 'hombre' THEN 1 ELSE 0 END) * 100.0 / COUNT(id), 2) AS porcentaje_hombres, 
+                                ROUND(SUM(CASE WHEN genero = 'mujer' THEN 1 ELSE 0 END) * 100.0 / COUNT(id), 2) AS porcentaje_mujeres 
+                                FROM empleados 
+                                WHERE fecha_baja IS NOT NULL;
+                            """)
+        num = self.cursor.fetchall()
+        self.__close__()
+        num_emp = [num[0][0],num[0][1],num[0][2]]
         
-   
+        for i in range(len(num_emp)):
+            if num_emp[i] is None:
+                num_emp[i] = 0
+                
+        return num_emp
+    
+    
+    def edad_media(self):
+        self.__open__()
+        self.cursor.execute("""
+                            SELECT 
+                                ROUND(AVG((JULIANDAY('now') - JULIANDAY(fecha_nacimiento)) / 365.25), 2),
+                                ROUND(AVG(CASE WHEN genero = 'hombre' THEN (JULIANDAY('now') - JULIANDAY(fecha_nacimiento)) / 365.25 ELSE NULL END), 2) , 
+                                ROUND(AVG(CASE WHEN genero = 'mujer' THEN (JULIANDAY('now') - JULIANDAY(fecha_nacimiento)) / 365.25 ELSE NULL END), 2) 
+                                FROM empleados;
+                            """)
+        num = self.cursor.fetchall()
+        self.__close__()
+        return [num[0][0],num[0][1],num[0][2]]
     
         
-        
+    def retribucion_media(self):
+        self.__open__()
+        self.cursor.execute("""
+                            SELECT 
+                                ROUND(AVG(salario_mensual), 2),
+                                ROUND(AVG(CASE WHEN genero = 'hombre' THEN salario_mensual ELSE 0 END), 2), 
+                                ROUND(AVG(CASE WHEN genero = 'mujer' THEN salario_mensual ELSE 0 END), 2) 
+                                FROM empleados;
+                            """)
+        num = self.cursor.fetchall()
+        print(num)
+        self.__close__()
+        return [num[0][1],num[0][0],num[0][2]]
     
+    
+    def existe_empleado(self, codigo):
+        self.__open__()
+        self.cursor.execute("SELECT * FROM empleados WHERE id = ?", (codigo,))
+        empleado = self.cursor.fetchone()
+        self.__close__()
+        
+        if empleado:
+            return True
+        
+        return False
+        
+    def darbaja_empleado(self, codigo , fecha_baja):
+        self.__open__()
+        self.cursor.execute("UPDATE empleados SET fecha_baja = ? WHERE id = ?", (fecha_baja, codigo))
+        self.__close__()

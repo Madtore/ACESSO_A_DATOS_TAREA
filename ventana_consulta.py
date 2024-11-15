@@ -97,7 +97,7 @@ class Ventana_consulta():
         
         #linea 6
         Label(self.ventana , text="Prorrata pagas", font=("Arial", self.dimensi_caratere)).grid(row=14, column=0, columnspan=1, padx=10 )
-        Entry(self.ventana , textvariable=self.prorrata_pagas,font=("Arial", self.dimensi_caratere)).grid(row=14, column=1, columnspan=1, pady=10, padx=10 )
+        Entry(self.ventana , textvariable=self.prorrata_pagas,justify="center",font=("Arial", self.dimensi_caratere)).grid(row=14, column=1, columnspan=1, pady=10, padx=10 )
         
         Label(self.ventana , text="Seg. Social", font=("Arial", self.dimensi_caratere)).grid(row=14, column=2, columnspan=1, padx=10 )
         Entry(self.ventana , textvariable=self.seg_social, justify="center", state="readonly",font=("Arial", self.dimensi_caratere)).grid(row=14, column=3, columnspan=1, pady=10, padx=10 )
@@ -120,19 +120,30 @@ class Ventana_consulta():
         
         
     def car_empleado(self):
+        self.validacions.set("")
+        self.a_percibir.set("")
+        self.retencion_irpf.set("")
+        self.deduccion_irpf.set("")
+        self.deduccion_ss.set("")
         db = DataBase()
-        empleado = db.buscar_empleado(self.codigo.get())
+        try:
+            empleado = db.buscar_empleado(self.codigo.get())
+            self.apellido_nombre.set(empleado.apellido_nombre)
+            self.fecha_inicio.set(empleado.fecha_inicio)
+            self.direccion.set(empleado.direccion)
+            self.nif.set(empleado.nif)
+            self.datos_bancarios.set(empleado.datos_bancarios)
+            self.numero_seguro_social.set(empleado.numero_seguro_social)
+            self.salario_bruto.set(empleado.salario_mensual*12)
+            self.salario_mensual.set(empleado.salario_mensual)
+            self.irpf.set(empleado.irpf)
+            self.seg_social.set(empleado.seg_social)
+        except:
+            self.validacions.set("Empleado con codigo {} no encontrado".format(self.codigo.get()))
+            return
+        
         print(empleado)
-        self.apellido_nombre.set(empleado.apellido_nombre)
-        self.fecha_inicio.set(empleado.fecha_inicio)
-        self.direccion.set(empleado.direccion)
-        self.nif.set(empleado.nif)
-        self.datos_bancarios.set(empleado.datos_bancarios)
-        self.numero_seguro_social.set(empleado.numero_seguro_social)
-        self.salario_bruto.set(empleado.salario_mensual*12)
-        self.salario_mensual.set(empleado.salario_mensual)
-        self.irpf.set(empleado.irpf)
-        self.seg_social.set(empleado.seg_social)
+        
         
        
     
@@ -140,7 +151,7 @@ class Ventana_consulta():
 
         salario_anual =float(self.salario_bruto.get())
         salario_mensual = float(self.salario_mensual.get())
-        numero_pagos =float(self.numero_pagos.get())  # Número de pagas (12 o 14)
+        numero_pagos =float(self.numero_pagos.get())  
         
         if numero_pagos == 14:
             prorrata_paginas = salario_anual / 14 - salario_mensual
@@ -151,15 +162,12 @@ class Ventana_consulta():
         irpf = float(self.irpf.get())
         seg_social = float(self.seg_social.get())
 
-        # Calcular deducciones
         deduccion_irpf = salario_bruto_mensual * (irpf / 100)
         deduccion_seg_social = salario_bruto_mensual * (seg_social / 100)
 
-        # Calcular salario neto a percibir
         salario_neto = salario_bruto_mensual - deduccion_irpf - deduccion_seg_social
 
-        # Actualizar los atributos de salida
-        self.deduccion_irpf.set(deduccion_irpf)
+        self.retencion_irpf.set(deduccion_irpf)
         self.deduccion_ss.set(deduccion_seg_social)
         self.a_percibir.set(salario_neto)
         

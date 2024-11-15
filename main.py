@@ -3,20 +3,22 @@ from data_base import *
 from ventana_baja import *
 from ventana_alta import *
 from ventana_consulta import *
+from ventana_informe import *
+
 
 
 
 def informes():
-    ventana_consulta = Ventana_consulta(principal)
+    ventana = Ventana_informe(principal)
     
 def nominas():
-    print("Nominas")
+    ventana = Ventana_consulta(principal)
     
 def altas():
-    ventana_alta = Ventana_alta(principal)
+    ventana = Ventana_alta(principal)
     
 def bajas():
-    ventana_baja = Ventana_baja(principal)
+    ventana = Ventana_baja(principal)
     
 base_datos = DataBase()
 
@@ -46,7 +48,6 @@ Button(sengundaFilaBotones, text="Informes" ,command = informes, **button_stile)
 Label(sengundaFilaBotones, text="").grid(row=0, column=1)
 Button(sengundaFilaBotones, text="Nóminas" ,command = nominas,  **button_stile).grid(row=0, column=2)
 
-
-
+print(base_datos.num_empleados_baja())
 
 principal.mainloop()

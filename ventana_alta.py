@@ -1,4 +1,6 @@
 from tkinter import *
+from tkinter.ttk import Combobox
+from tkcalendar import DateEntry
 from validador import Validador
 from data_base import *
 from empleado import *
@@ -49,10 +51,10 @@ class Ventana_alta():
         
         #linea 2
         Label(self.ventana , text="Fecha de inicio", font=("Arial",self.dimensi_caratere)).grid(row=3, column=0, columnspan=1, padx=10 )
-        Entry(self.ventana , textvariable=self.fecha_inicio, font=("Arial", self.dimensi_caratere)).grid(row=4, column=0, columnspan=1, pady=10, padx=10 , sticky="EW")
+        DateEntry(self.ventana, textvariable=self.fecha_inicio, font=("Arial", self.dimensi_caratere), date_pattern="yyyy-mm-dd").grid(row=4, column=0, columnspan=1, pady=10, padx=10, sticky="EW")
         
         Label(self.ventana , text="Fecha de nacimiento", font=("Arial",self.dimensi_caratere)).grid(row=3, column=1, columnspan=1, padx=10 )
-        Entry(self.ventana , textvariable=self.fecha_nacimiento, font=("Arial", self.dimensi_caratere)).grid(row=4, column=1, columnspan=1, pady=10, padx=10 , sticky="EW")
+        DateEntry(self.ventana, textvariable=self.fecha_nacimiento, font=("Arial", self.dimensi_caratere), date_pattern="yyyy-mm-dd").grid(row=4, column=1, columnspan=1, pady=10, padx=10, sticky="EW")
         
         Label(self.ventana , text="Direccion", font=("Arial",self.dimensi_caratere)).grid(row=3, column=2, columnspan=4, padx=10 , sticky="EW")
         Entry(self.ventana , textvariable=self.direccion, font=("Arial", self.dimensi_caratere)).grid(row=4, column=2, columnspan=4, pady=10, padx=10 , sticky="EW")
@@ -74,7 +76,10 @@ class Ventana_alta():
        
         #linea 4
         Label(self.ventana , text="Genero", font=("Arial", self.dimensi_caratere)).grid(row=9, column=0, columnspan=1, padx=10 )
-        Entry(self.ventana , textvariable=self.genero, font=("Arial", self.dimensi_caratere)).grid(row=10, column=0, columnspan=1, pady=10, padx=10 , sticky="EW")
+        Combobox(self.ventana, textvariable=self.genero, state="readonly", value=("Mujer", "Hombre"), font=("Arial", self.dimensi_caratere)).grid(row=10, column=0, columnspan=1, pady=10, padx=10, sticky="EW")
+        
+        
+        #Entry(self.ventana , textvariable=self.genero, font=("Arial", self.dimensi_caratere)).grid(row=10, column=0, columnspan=1, pady=10, padx=10 , sticky="EW")
         
         Label(self.ventana , text="Departamento", font=("Arial", self.dimensi_caratere)).grid(row=9, column=1, columnspan=3, padx=10 )
         Entry(self.ventana , textvariable=self.departamento, font=("Arial", self.dimensi_caratere)).grid(row=10, column=1, columnspan=3, pady=10, padx=10 , sticky="EW")
@@ -116,7 +121,7 @@ class Ventana_alta():
        
         
         
-        self.ventana.mainloop()
+        
         
     def confirmar(self):
        if self.validarCampos():
