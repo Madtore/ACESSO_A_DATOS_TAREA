@@ -158,7 +158,7 @@ class DataBase:
                                 ROUND(AVG((JULIANDAY('now') - JULIANDAY(fecha_nacimiento)) / 365.25), 2),
                                 ROUND(AVG(CASE WHEN genero = 'hombre' THEN (JULIANDAY('now') - JULIANDAY(fecha_nacimiento)) / 365.25 ELSE NULL END), 2) , 
                                 ROUND(AVG(CASE WHEN genero = 'mujer' THEN (JULIANDAY('now') - JULIANDAY(fecha_nacimiento)) / 365.25 ELSE NULL END), 2) 
-                                FROM empleados;
+                                FROM empleados WHERE fecha_baja IS NULL;
                             """)
         num = self.cursor.fetchall()
         self.__close__()
@@ -172,7 +172,7 @@ class DataBase:
                                 ROUND(AVG(salario_mensual), 2),
                                 ROUND(AVG(CASE WHEN genero = 'hombre' THEN salario_mensual ELSE 0 END), 2), 
                                 ROUND(AVG(CASE WHEN genero = 'mujer' THEN salario_mensual ELSE 0 END), 2) 
-                                FROM empleados;
+                                FROM empleados WHERE fecha_baja IS NULL;
                             """)
         num = self.cursor.fetchall()
         print(num)

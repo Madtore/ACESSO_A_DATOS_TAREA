@@ -11,6 +11,8 @@ class Ventana_informe:
         self.ventana.title("Informe")
         self.ventana.geometry("800x600")
         self.ventana.grab_set()
+        
+        self.ventana.protocol("WM_DELETE_WINDOW", self.cerrar_ventana)
 
         self.frameAlta = Frame(self.ventana)
         self.frameBaja = Frame(self.ventana)
@@ -70,3 +72,8 @@ class Ventana_informe:
         self.frameSalario.pack_forget()
 
         frame.pack(fill="both", expand=True)
+        
+        
+    def cerrar_ventana(self):
+        plt.close("all")
+        self.ventana.destroy() 
