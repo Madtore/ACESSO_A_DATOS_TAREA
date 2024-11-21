@@ -18,6 +18,7 @@ class Ventana_informe:
         self.frameBaja = Frame(self.ventana)
         self.frameEdad = Frame(self.ventana)
         self.frameSalario = Frame(self.ventana)
+        
 
        
         frameBotton = Frame(self.ventana)
@@ -28,42 +29,70 @@ class Ventana_informe:
         frameBotton.pack(pady=10)
 
         db = DataBase()
-        barra = ["General", "Hombres", "Mujeres"] 
+        
 
-        self.crear_tarta(self.frameAlta, "Altas", db.num_empleados_alta()[1:], barra[1:])
-        self.crear_tarta(self.frameBaja, "Bajas", db.num_empleados_baja()[1:], barra[1:])
-        self.crear_grafico(self.frameEdad, "Edad", db.edad_media(), barra)
-        self.crear_grafico(self.frameSalario, "Salario", db.retribucion_media(), barra)
+        self.crear_tarta(self.frameAlta, "Altas", db.num_empleados_alta())
+        self.crear_tarta(self.frameBaja, "Bajas", db.num_empleados_baja())
+        self.crear_grafico(self.frameEdad, "Edad", db.edad_media())
+        self.crear_grafico(self.frameSalario, "Salario", db.retribucion_media())
 
         self.frameAlta.pack(fill="both", expand=True)
         
-    def crear_tarta(self, frame, titulo, datos, barra):
+    def crear_tarta(self, frame, titulo, datos):
+    
+        etiquetas = []
+        valores = []
         
-        for i in range(len(datos)):
-            if datos[i] == 0:
-                datos.remove(datos[i])
-                barra.remove(barra[i])
-                 
-        Label(frame, text=titulo).pack()
-        fig, ax = plt.subplots()
-        ax.pie(datos, labels=barra, autopct='%1.1f%%', shadow=True, startangle=90)
-        ax.axis('equal') 
-        canvas = FigureCanvasTkAgg(fig, master=frame)
-        canvas.draw()
-        canvas.get_tk_widget().pack()    
+        for key, value in datos.items():
+            print(key, value)
+            if key == "empleados":
+                continue
+            
+            if value != 0:
+                etiquetas.append(key)
+                valores.append(value)
+            
+        if len(etiquetas) < 1:
+            Label(frame, text="Valores no disponibles").pack()
+        else:
+            Label(frame, text=titulo).pack()
+            for i, value in enumerate(valores):
+                Label(frame, text=f"{etiquetas[i]}: {value}").pack()
+                
+            fig, ax = plt.subplots()
+            ax.pie(valores, labels=etiquetas, autopct='%1.1f%%', shadow=True, startangle=90)
+            ax.axis('equal') 
+            canvas = FigureCanvasTkAgg(fig, master=frame)
+            canvas.draw()
+            canvas.get_tk_widget().pack()    
 
-    def crear_grafico(self, frame, titulo, datos, barra):
-        datos = list(map(lambda x: 0 if x is None else x, datos))
-        Label(frame, text=titulo).pack()
-        y_pos = np.arange(len(barra))  
-        fig, ax = plt.subplots()  
-        ax.bar(y_pos, datos, color=['green', 'blue','pink']) 
-        ax.set_xticks(y_pos)
-        ax.set_xticklabels(barra)
+    def crear_grafico(self, frame, titulo, datos):
+        
+        etiquetas = []
+        valores = []
+        
+        for key, value in datos.items():
+            print(key, value)
+            
+            if value != 0:
+                etiquetas.append(key)
+                valores.append(value)
+            
+        if len(etiquetas) <= 1:
+            Label(frame, text="Valores no disponibles").pack()
+        else:
+            Label(frame, text=titulo).pack()
+            for i, value in enumerate(valores):
+                Label(frame, text=f"{etiquetas[i]}: {value}").pack()
+            y_pos = np.arange(len(etiquetas))  
+            fig, ax = plt.subplots()  
+            ax.bar(y_pos, valores, color=['green', 'blue','pink']) 
+            ax.set_xticks(y_pos)
+            ax.set_xticklabels(etiquetas)
 
-        canvas = FigureCanvasTkAgg(fig, master=frame)
-        canvas.draw()
-        canvas.get_tk_widget().pack()
+            canvas = FigureCanvasTkAgg(fig, master=frame)
+            canvas.draw()
+            canvas.get_tk_widget().pack()
 
     def cambia_frame(self, frame):
         self.frameAlta.pack_forget()

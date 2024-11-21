@@ -23,7 +23,7 @@ def bajas():
 base_datos = DataBase()
 
 principal = Tk()
-principal.geometry("800x600")
+principal.geometry("1200x800")
 principal.title("Aplicación de gestión nóminas")
 
 image = PhotoImage(file="img/nomina.png").subsample(2, 2)        
@@ -35,7 +35,7 @@ Label(principal, text="").pack()
 filaBotones = Frame(principal)
 filaBotones.pack()
 
-button_stile = {'width': 30, 'height': 5 , 'background': 'yellow'} 
+button_stile = {'width': 30, 'height': 5 , 'background': '#7F8C8D' , 'font': ('Arial', 16)} 
 
 Button(filaBotones, text="Bajas" , command = bajas,**button_stile).grid(row=0, column=0)
 Label(filaBotones, text="").grid(row=0, column=1)

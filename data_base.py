@@ -122,9 +122,13 @@ class DataBase:
                                 FROM empleados 
                                 WHERE fecha_baja IS NULL;
                             """)
-        num = self.cursor.fetchall()
+        num = self.cursor.fetchone()
         self.__close__()
-        return [num[0][0],num[0][1],num[0][2]]
+        return{
+            "empleados": num[0] if num[0] is not None else 0,
+            "hombres": num[1] if num[1] is not None else 0,
+            "mujeres": num[2] if num[2] is not None else 0
+        }
     
     
     def num_empleados_baja(self):
@@ -137,15 +141,14 @@ class DataBase:
                                 FROM empleados 
                                 WHERE fecha_baja IS NOT NULL;
                             """)
-        num = self.cursor.fetchall()
+        num = self.cursor.fetchone()
         self.__close__()
-        num_emp = [num[0][0],num[0][1],num[0][2]]
-        
-        for i in range(len(num_emp)):
-            if num_emp[i] is None:
-                num_emp[i] = 0
-                
-        return num_emp
+              
+        return {
+            "empleados": num[0] if num[0] is not None else 0,
+            "hombres": num[1] if num[1] is not None else 0,
+            "mujeres": num[2] if num[2] is not None else 0
+        }
     
     
     def edad_media(self):
@@ -157,9 +160,15 @@ class DataBase:
                                 ROUND(AVG(CASE WHEN genero = 'mujer' THEN (JULIANDAY('now') - JULIANDAY(fecha_nacimiento)) / 365.25 ELSE NULL END), 2) 
                                 FROM empleados WHERE fecha_baja IS NULL;
                             """)
-        num = self.cursor.fetchall()
+        num = self.cursor.fetchone()
         self.__close__()
-        return [num[0][0],num[0][1],num[0][2]]
+        return {
+            "empleados": num[0] if num[0] is not None else 0,
+            "hombres": num[1] if num[1] is not None else 0,
+            "mujeres": num[2] if num[2] is not None else 0
+        }
+        
+       
     
         
     def retribucion_media(self):
@@ -171,10 +180,14 @@ class DataBase:
                                 ROUND(AVG(CASE WHEN genero = 'mujer' THEN salario_mensual ELSE 0 END), 2) 
                                 FROM empleados WHERE fecha_baja IS NULL;
                             """)
-        num = self.cursor.fetchall()
+        num = self.cursor.fetchone()
         print(num)
         self.__close__()
-        return [num[0][1],num[0][0],num[0][2]]
+        return {
+            "total": num[1],
+            "hombres": num[0],
+            "mujeres": num[2]
+        }
     
     
     def existe_empleado(self, codigo):

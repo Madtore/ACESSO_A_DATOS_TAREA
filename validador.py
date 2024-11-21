@@ -29,7 +29,7 @@ class Validador():
     '21': "K",
     '22': "E"
 }
-        pass
+        
     
 
     def validadorGeneral(self, valor ):
