@@ -16,10 +16,11 @@ class Ventana_alta():
         self.ventana.resizable(0, 0)
         self.ventana.grab_set()
 
+        
         for col in range(6): 
             self.ventana.grid_columnconfigure(col, weight=1)
             
-        self.dimensi_caratere = 14    
+           
             
         self.apellido_nombre = StringVar()
         self.fecha_inicio = StringVar()
@@ -42,7 +43,7 @@ class Ventana_alta():
         
         self.validacions.set("Mensaje de validación")
         
-        stile = {"font": ("Arial", self.dimensi_caratere)}
+        stile = {"font": ("Arial", 14)}
         
         
         
@@ -120,7 +121,7 @@ class Ventana_alta():
         Entry(self.ventana, textvariable=self.validacions, justify="center",state="readonly", fg="red", **stile).grid(row=16, column=0, columnspan=4, rowspan=3, pady=10 , padx=10, sticky="EWSN" ) 
 
         
-        Button(self.ventana,  text="Insertar", command=self.confirmar , **stile , background="#7F8C8D").grid(row = 16 , column= 4, columnspan=2, rowspan=3, pady=10 , padx=10, sticky="EWSN" ) 
+        Button(self.ventana,  text="Insertar", command=self.confirmar , **stile , background="#2ECC71", fg="white").grid(row = 16 , column= 4, columnspan=2, rowspan=3, pady=10 , padx=10, sticky="EWSN" ) 
        
         
         
@@ -204,9 +205,10 @@ class Ventana_alta():
 
         if errores:
             mensaje_error = "\n".join(errores)
-            messagebox.showerror("Validación de campos", mensaje_error)  
+            messagebox.showwarning("Validación de campos", mensaje_error)  
             self.validacions.set(mensaje_error)
             return False
         else:
             self.validacions.set("Todos los campos son válidos.")
+            messagebox.showinfo("Empleado insertado")
             return True

@@ -9,7 +9,7 @@ class Ventana_informe:
     def __init__(self, ventana_principal):
         self.ventana = Toplevel(ventana_principal)
         self.ventana.title("Informe")
-        self.ventana.geometry("800x600")
+        self.ventana.geometry("1200x800")
         self.ventana.grab_set()
         
         self.ventana.protocol("WM_DELETE_WINDOW", self.cerrar_ventana)
@@ -18,14 +18,14 @@ class Ventana_informe:
         self.frameBaja = Frame(self.ventana)
         self.frameEdad = Frame(self.ventana)
         self.frameSalario = Frame(self.ventana)
-        
 
+        self.stile = {"font": ("Arial", 14)}
        
         frameBotton = Frame(self.ventana)
-        Button(frameBotton, text="Informe Altas", command=lambda: self.cambia_frame(self.frameAlta)).grid(row=0, column=0, padx=10)
-        Button(frameBotton, text="Informe Bajas", command=lambda: self.cambia_frame(self.frameBaja)).grid(row=0, column=1, padx=10)
-        Button(frameBotton, text="Informe Edad", command=lambda: self.cambia_frame(self.frameEdad)).grid(row=0, column=2, padx=10)
-        Button(frameBotton, text="Informe Salario", command=lambda: self.cambia_frame(self.frameSalario)).grid(row=0, column=3, padx=10)
+        Button(frameBotton, text="Informe Altas" , background="#4169e1", foreground="#FFFFFF",width=15,font=("Arial", 16) ,command=lambda: self.cambia_frame(self.frameAlta)).grid(row=0, column=0, padx=10)
+        Button(frameBotton, text="Informe Bajas", background="#4169e1",foreground="#FFFFFF", width=15,font=("Arial", 16) ,command=lambda: self.cambia_frame(self.frameBaja)).grid(row=0, column=1, padx=10)
+        Button(frameBotton, text="Informe Edad", background="#4169e1",foreground="#FFFFFF" ,width=15, font=("Arial", 16),command=lambda: self.cambia_frame(self.frameEdad)).grid(row=0, column=2, padx=10)
+        Button(frameBotton, text="Informe Salario", background="#4169e1", foreground="#FFFFFF",width=15,font=("Arial", 16) ,command=lambda: self.cambia_frame(self.frameSalario)).grid(row=0, column=3, padx=10)
         frameBotton.pack(pady=10)
 
         db = DataBase()
@@ -53,11 +53,11 @@ class Ventana_informe:
                 valores.append(value)
             
         if len(etiquetas) < 1:
-            Label(frame, text="Valores no disponibles").pack()
+            Label(frame, text="Valores no disponibles", **self.stile).pack()
         else:
-            Label(frame, text=titulo).pack()
+            Label(frame, text=titulo ,**self.stile).pack()
             for i, value in enumerate(valores):
-                Label(frame, text=f"{etiquetas[i]}: {value}").pack()
+                Label(frame, text=f"{etiquetas[i]}: {value}", **self.stile).pack()
                 
             fig, ax = plt.subplots()
             ax.pie(valores, labels=etiquetas, autopct='%1.1f%%', shadow=True, startangle=90)
@@ -79,11 +79,11 @@ class Ventana_informe:
                 valores.append(value)
             
         if len(etiquetas) <= 1:
-            Label(frame, text="Valores no disponibles").pack()
+            Label(frame, text="Valores no disponibles" , **self.stile).pack()
         else:
-            Label(frame, text=titulo).pack()
+            Label(frame, text=titulo , **self.stile).pack()
             for i, value in enumerate(valores):
-                Label(frame, text=f"{etiquetas[i]}: {value}").pack()
+                Label(frame, text=f"{etiquetas[i]}: {value}" , **self.stile).pack()
             y_pos = np.arange(len(etiquetas))  
             fig, ax = plt.subplots()  
             ax.bar(y_pos, valores, color=['green', 'blue','pink']) 
