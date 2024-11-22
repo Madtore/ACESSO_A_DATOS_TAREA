@@ -125,6 +125,9 @@ class Ventana_consulta():
         self.retencion_irpf.set("")
         self.deduccion_irpf.set("")
         self.deduccion_ss.set("")
+        self.prorrata_pagas.set("")
+        self.seg_social.set("")
+
         db = DataBase()
         try:
             empleado = db.buscar_empleado(self.codigo.get())
@@ -140,7 +143,8 @@ class Ventana_consulta():
             self.nif.set(empleado.nif)
             self.datos_bancarios.set(empleado.datos_bancarios)
             self.numero_seguro_social.set(empleado.numero_seguro_social)
-            self.salario_bruto.set(empleado.salario_mensual*12)
+            self.salario_bruto.set(empleado.salario_mensual*(12+empleado.paga_extra))
+            print(empleado.salario_mensual*(12+empleado.paga_extra))
             self.salario_mensual.set(empleado.salario_mensual)
             self.numero_pagos.set(empleado.paga_extra+12)
             self.irpf.set(empleado.irpf)
@@ -177,7 +181,7 @@ class Ventana_consulta():
 
         salario_neto = round(salario_bruto_mensual - deduccion_irpf - deduccion_seg_social, 2)
         
-        self.salario_bruto.set(salario_bruto_mensual)
+        
         self.prorrata_pagas.set(prorrata_pagas) 
         self.retencion_irpf.set(deduccion_irpf)
         self.deduccion_ss.set(deduccion_seg_social)
@@ -191,7 +195,7 @@ class Ventana_consulta():
             'deduccion_ss': self.deduccion_ss.get(),
             'a_percibir': self.a_percibir.get(),
         }
-        ventanaFactura = VentanaNomina(self.ventana, self.empleado , self.datos) 
+        VentanaNomina(self.ventana, self.empleado , self.datos) 
         
         
         

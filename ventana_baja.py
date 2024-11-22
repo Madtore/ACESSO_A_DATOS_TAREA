@@ -72,6 +72,10 @@ class Ventana_baja():
             self.validacions.set("El empleado no existe")
             return
         
+        if db.esta_de_baja(codigo):
+            self.validacions.set("El empleado ya esta dado de baja")
+            return
+        
         db.darbaja_empleado(codigo,fecha_baja)
         
         self.validacions.set("El empleado cod:{} ha sido dado de baja en fecha: {}".format(codigo,fecha_baja))

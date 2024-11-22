@@ -44,7 +44,7 @@ filaBotones.pack()
 
 button_stile = {'width': 30, 'height': 5, 'background': '#4169e1', 'font': ('Arial', 16), 'foreground': '#FFFFFF'}
 
-Button(filaBotones, text="Bajas" , command = bajas,**button_stile).grid(row=0, column=0)
+Button(filaBotones, text="Bajas" , command = bajas,**button_stile).grid(row=0, column=0 )
 Label(filaBotones, text="").grid(row=0, column=1)
 Button(filaBotones, text="Altas" ,command = altas, **button_stile).grid(row=0, column=2)
 

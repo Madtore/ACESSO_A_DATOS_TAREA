@@ -200,6 +200,18 @@ class DataBase:
             return True
         
         return False
+    
+    
+    def esta_de_baja(self, codigo):
+        self.__open__()
+        self.cursor.execute("SELECT * FROM empleados WHERE id = ? AND fecha_baja IS NOT NULL", (codigo,))
+        empleado = self.cursor.fetchone()
+        self.__close__()
+        
+        if empleado:
+            return True
+        
+        return False
         
     def darbaja_empleado(self, codigo , fecha_baja):
         self.__open__()

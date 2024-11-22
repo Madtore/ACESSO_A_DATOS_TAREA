@@ -46,7 +46,6 @@ class Ventana_informe:
         valores = []
         
         for key, value in datos.items():
-            print(key, value)
             if key == "empleados":
                 continue
             

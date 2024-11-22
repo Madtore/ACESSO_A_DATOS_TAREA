@@ -2,8 +2,8 @@ from tkinter import *
 from tkinter.ttk import Combobox
 from tkcalendar import DateEntry
 from validador import Validador
-from data_base import *
-from empleado import *
+from data_base import DataBase
+from empleado import Empleado
 from tkinter import messagebox
 
 
@@ -124,20 +124,9 @@ class Ventana_alta():
         Button(self.ventana,  text="Insertar", command=self.confirmar , **stile , background="#2ECC71", fg="white").grid(row = 16 , column= 4, columnspan=2, rowspan=3, pady=10 , padx=10, sticky="EWSN" ) 
        
         
-        self.text_validacions = Text(
-            self.ventana, 
-            wrap="word",  
-            height=10,     
-            width=50,     
-            fg="red",     
-            font=stile["font"] 
-        )
-
-        self.text_validacions.grid(
-            row=16, column=0, columnspan=4, rowspan=10, pady=10, padx=10, sticky="EWSN"
-        )  
-
-        self.text_validacions.config(state="disabled")
+        self.validacions_texto = Text(self.ventana,wrap="word",height=10,width=50, fg="red", font=stile["font"])
+        self.validacions_texto.grid(row=16, column=0, columnspan=2, rowspan=5, pady=10, padx=10, sticky="EWSN")  
+        self.validacions_texto.config(state="disabled")
 
 
     def confirmar(self):
@@ -167,6 +156,7 @@ class Ventana_alta():
             db.insertar(emp)
             
             messagebox.showinfo("Insertado", "Empleado insertado con exito")
+            self.reset_campos()
             
 
        
@@ -220,12 +210,12 @@ class Ventana_alta():
             errores.append("Seguro Social ")
 
         if errores:
-            self.text_validacions.config(state="normal")
-            self.text_validacions.delete("1.0", "end")
+            self.validacions_texto.config(state="normal")
+            self.validacions_texto.delete("1.0", "end")
             for item in errores:
-                self.text_validacions.insert("end", f"{item}\n")
+                self.validacions_texto.insert("end", f"{item}\n")
                 
-            self.text_validacions.config(state="disabled")    
+            self.validacions_texto.config(state="disabled")    
             return False
         else:
             self.validacions.set("Todos los campos son válidos.")
