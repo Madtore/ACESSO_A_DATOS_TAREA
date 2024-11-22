@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from data_base import DataBase
 from empleado import Empleado
-from ventana_factura import VentanaFactura
+from ventana_nomina import VentanaNomina
 
 
 class Ventana_consulta():
@@ -11,7 +11,6 @@ class Ventana_consulta():
         self.ventana = Toplevel(ventana_principal)
         self.ventana.geometry("1400x600")
         self.ventana.title("Consulta")
-        self.ventana.resizable(0, 0)
         self.ventana.grab_set()
 
         for col in range(6):
@@ -77,7 +76,7 @@ class Ventana_consulta():
         Label(self.ventana, text="Salario bruto", **stile).grid(row=9, column=0, columnspan=1, padx=10 )
         Entry(self.ventana, textvariable=self.salario_bruto, justify="center", state="readonly",**stile).grid(row=9, column=1, columnspan=1, pady=10, padx=10 , sticky="EW")
         Label(self.ventana, text="Numero de pagos", **stile).grid(row=9, column=2, columnspan=1, padx=10 )
-        Entry(self.ventana, textvariable=self.numero_pagos, justify="center", **stile).grid(row=9, column=3, columnspan=1, pady=10, padx=10 , sticky="EW")
+        Entry(self.ventana, textvariable=self.numero_pagos, justify="center", state="readonly", **stile).grid(row=9, column=3, columnspan=1, pady=10, padx=10 , sticky="EW")
 
         Label(self.ventana, text="").grid(row=10, column=6, columnspan=6, pady=10, padx=10, sticky="EW")
 
@@ -98,7 +97,7 @@ class Ventana_consulta():
         
         #linea 6
         Label(self.ventana , text="Prorrata pagas",  **stile).grid(row=14, column=0, columnspan=1, padx=10 )
-        Entry(self.ventana , textvariable=self.prorrata_pagas,justify="center", **stile).grid(row=14, column=1, columnspan=1, pady=10, padx=10 )
+        Entry(self.ventana , textvariable=self.prorrata_pagas,justify="center", state="readonly", **stile).grid(row=14, column=1, columnspan=1, pady=10, padx=10 )
         
         Label(self.ventana , text="Seg. Social",  **stile).grid(row=14, column=2, columnspan=1, padx=10 )
         Entry(self.ventana , textvariable=self.seg_social, justify="center", state="readonly", **stile).grid(row=14, column=3, columnspan=1, pady=10, padx=10 )
@@ -115,7 +114,7 @@ class Ventana_consulta():
         #Label(self.ventana, text="").grid(row=17, column=0, columnspan=6, pady=10, padx=10, sticky="EW")
         # #linea 8
         Button(self.ventana , text="Cargar empleado" ,  background="#2ECC71", command=self.car_empleado,**stile).grid(row=18, column=0, columnspan=3, pady=10, padx=10 , sticky="EW")
-        Button(self.ventana , text="Calcular", background="#4169e1",command=self.calular, **stile).grid(row=18, column=3, columnspan=2, pady=10, padx=10 , sticky="EW")
+        Button(self.ventana , text="Calcular", background="#4169e1",command=self.carcular, **stile).grid(row=18, column=3, columnspan=2, pady=10, padx=10 , sticky="EW")
         Button(self.ventana , text="Imprimir", background="#4169e1",command=self.imprimir, **stile).grid(row=18, column=5, columnspan=2, pady=10, padx=10 , sticky="EW")
         
         
@@ -143,6 +142,7 @@ class Ventana_consulta():
             self.numero_seguro_social.set(empleado.numero_seguro_social)
             self.salario_bruto.set(empleado.salario_mensual*12)
             self.salario_mensual.set(empleado.salario_mensual)
+            self.numero_pagos.set(empleado.paga_extra+12)
             self.irpf.set(empleado.irpf)
             self.seg_social.set(empleado.seg_social)
             self.empleado = empleado
@@ -155,33 +155,43 @@ class Ventana_consulta():
         
        
     
-    def calular (self):
+    def carcular (self):
 
-        salario_anual =float(self.salario_bruto.get())
         salario_mensual = float(self.salario_mensual.get())
         numero_pagos =float(self.numero_pagos.get())  
         
-        if numero_pagos == 14:
-            prorrata_paginas = salario_anual / 14 - salario_mensual
-            salario_bruto_mensual = salario_mensual + prorrata_paginas
+        if numero_pagos > 12:
+            paga_extra = salario_mensual 
+            numero_pagas_extra = numero_pagos - 12
+            prorrata_pagas = round((paga_extra * numero_pagas_extra) / 12, 2)
+            salario_bruto_mensual = salario_mensual + prorrata_pagas
         else:
             salario_bruto_mensual = salario_mensual
+            prorrata_pagas = 0
         
         irpf = float(self.irpf.get())
         seg_social = float(self.seg_social.get())
 
-        deduccion_irpf = round(salario_bruto_mensual * (irpf / 100),2)
-        deduccion_seg_social = round(salario_bruto_mensual * (seg_social / 100),2)
+        deduccion_irpf = round(salario_bruto_mensual * (irpf / 100), 2)
+        deduccion_seg_social = round(salario_bruto_mensual * (seg_social / 100), 2)
 
-        salario_neto =  round(salario_bruto_mensual - deduccion_irpf - deduccion_seg_social)
-
+        salario_neto = round(salario_bruto_mensual - deduccion_irpf - deduccion_seg_social, 2)
+        
+        self.salario_bruto.set(salario_bruto_mensual)
+        self.prorrata_pagas.set(prorrata_pagas) 
         self.retencion_irpf.set(deduccion_irpf)
         self.deduccion_ss.set(deduccion_seg_social)
         self.a_percibir.set(salario_neto)
         
         
     def imprimir (self):
-        ventanaFactura = VentanaFactura(self.ventana, self.empleado) 
+        self.datos = {
+            'prorrata_pagas': self.prorrata_pagas.get(),
+            'retencion_irpf': self.retencion_irpf.get(),
+            'deduccion_ss': self.deduccion_ss.get(),
+            'a_percibir': self.a_percibir.get(),
+        }
+        ventanaFactura = VentanaNomina(self.ventana, self.empleado , self.datos) 
         
         
         

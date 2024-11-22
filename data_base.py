@@ -19,7 +19,7 @@ class DataBase:
             telefono TEXT NOT NULL,
             email TEXT NOT NULL,
             salario_mensual REAL NOT NULL,
-            paga_extra REAL NOT NULL,
+            paga_extra INT NOT NULL,
             irpf REAL NOT NULL,
             seg_social REAL NOT NULL,
             fecha_baja DATE 
@@ -117,8 +117,8 @@ class DataBase:
         self.cursor.execute("""
                             SELECT 
                                 COUNT(id) AS numtotal, 
-                                ROUND(SUM(CASE WHEN genero = 'hombre' THEN 1 ELSE 0 END) * 100.0 / COUNT(id), 2) AS porcentaje_hombres, 
-                                ROUND(SUM(CASE WHEN genero = 'mujer' THEN 1 ELSE 0 END) * 100.0 / COUNT(id), 2) AS porcentaje_mujeres 
+                                ROUND(SUM(CASE WHEN genero = 'Hombre' THEN 1 ELSE 0 END) * 100.0 / COUNT(id), 2) AS porcentaje_hombres, 
+                                ROUND(SUM(CASE WHEN genero = 'Mujer' THEN 1 ELSE 0 END) * 100.0 / COUNT(id), 2) AS porcentaje_mujeres 
                                 FROM empleados 
                                 WHERE fecha_baja IS NULL;
                             """)
@@ -136,8 +136,8 @@ class DataBase:
         self.cursor.execute("""
                             SELECT 
                                 COUNT(id) AS numtotal, 
-                                ROUND(SUM(CASE WHEN genero = 'hombre' THEN 1 ELSE 0 END) * 100.0 / COUNT(id), 2) AS porcentaje_hombres, 
-                                ROUND(SUM(CASE WHEN genero = 'mujer' THEN 1 ELSE 0 END) * 100.0 / COUNT(id), 2) AS porcentaje_mujeres 
+                                ROUND(SUM(CASE WHEN genero = 'Hombre' THEN 1 ELSE 0 END) * 100.0 / COUNT(id), 2) AS porcentaje_hombres, 
+                                ROUND(SUM(CASE WHEN genero = 'Mujer' THEN 1 ELSE 0 END) * 100.0 / COUNT(id), 2) AS porcentaje_mujeres 
                                 FROM empleados 
                                 WHERE fecha_baja IS NOT NULL;
                             """)
@@ -156,8 +156,8 @@ class DataBase:
         self.cursor.execute("""
                             SELECT 
                                 ROUND(AVG((JULIANDAY('now') - JULIANDAY(fecha_nacimiento)) / 365.25), 2),
-                                ROUND(AVG(CASE WHEN genero = 'hombre' THEN (JULIANDAY('now') - JULIANDAY(fecha_nacimiento)) / 365.25 ELSE NULL END), 2) , 
-                                ROUND(AVG(CASE WHEN genero = 'mujer' THEN (JULIANDAY('now') - JULIANDAY(fecha_nacimiento)) / 365.25 ELSE NULL END), 2) 
+                                ROUND(AVG(CASE WHEN genero = 'Hombre' THEN (JULIANDAY('now') - JULIANDAY(fecha_nacimiento)) / 365.25 ELSE NULL END), 2) , 
+                                ROUND(AVG(CASE WHEN genero = 'Mujer' THEN (JULIANDAY('now') - JULIANDAY(fecha_nacimiento)) / 365.25 ELSE NULL END), 2) 
                                 FROM empleados WHERE fecha_baja IS NULL;
                             """)
         num = self.cursor.fetchone()
@@ -176,8 +176,8 @@ class DataBase:
         self.cursor.execute("""
                             SELECT 
                                 ROUND(AVG(salario_mensual), 2),
-                                ROUND(AVG(CASE WHEN genero = 'hombre' THEN salario_mensual ELSE 0 END), 2), 
-                                ROUND(AVG(CASE WHEN genero = 'mujer' THEN salario_mensual ELSE 0 END), 2) 
+                                ROUND(AVG(CASE WHEN genero = 'Hombre' THEN salario_mensual ELSE 0 END), 2), 
+                                ROUND(AVG(CASE WHEN genero = 'Mujer' THEN salario_mensual ELSE 0 END), 2) 
                                 FROM empleados WHERE fecha_baja IS NULL;
                             """)
         num = self.cursor.fetchone()

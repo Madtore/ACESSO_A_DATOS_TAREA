@@ -30,7 +30,9 @@ class Validador():
     '22': "E"
 }
         
-    
+    def validador_paga_extra(self, valor ):
+        regex = r'^[1-4]$'
+        return re.match(regex, valor)
 
     def validadorGeneral(self, valor ):
         return valor != ""

@@ -11,7 +11,7 @@ from tkinter import messagebox
 class Ventana_alta():
     def __init__(self, ventana_principal ):
         self.ventana = Toplevel(ventana_principal)
-        self.ventana.geometry("1400x600")
+        self.ventana.geometry("1400x800")
         self.ventana.title("Altas")
         self.ventana.resizable(0, 0)
         self.ventana.grab_set()
@@ -34,11 +34,12 @@ class Ventana_alta():
         self.puesto = StringVar() 
         self.telefono = StringVar()
         self.salario_mensual = StringVar()
-        self.irpf = StringVar()
+        self.irpf = StringVar(value="11.00")
         self.email = StringVar()
         self.paga_extra = StringVar()
-        self.seg_social = StringVar()
+        self.seg_social = StringVar(value="5.60")
         self.validacions = StringVar()
+        
         
         
         self.validacions.set("Mensaje de validación")
@@ -101,7 +102,7 @@ class Ventana_alta():
         Entry(self.ventana , textvariable=self.salario_mensual, **stile).grid(row=12, column=3, columnspan=1, pady=10, padx=10)
         
         Label(self.ventana , text="IRPF", **stile).grid(row=12, column=4, columnspan=1, padx=10 )
-        Entry(self.ventana , textvariable=self.irpf, **stile).grid(row=12, column=5, columnspan=1, pady=10, padx=10)
+        Entry(self.ventana , state="readonly", textvariable=self.irpf, **stile).grid(row=12, column=5, columnspan=1, pady=10, padx=10)
         
         #linea 6
         Label(self.ventana , text="Email", **stile).grid(row=13, column=0, columnspan=1, padx=10 )
@@ -111,22 +112,34 @@ class Ventana_alta():
         Entry(self.ventana , textvariable=self.paga_extra, **stile).grid(row=13, column=3, columnspan=1, pady=10, padx=10)
         
         Label(self.ventana , text="SEG. SOCIAL", **stile).grid(row=13, column=4, columnspan=1, padx=10 )
-        Entry(self.ventana , textvariable=self.seg_social, **stile).grid(row=13, column=5, columnspan=1, pady=10, padx=10)
+        Entry(self.ventana , state="readonly", textvariable=self.seg_social, **stile).grid(row=13, column=5, columnspan=1, pady=10, padx=10)
         
         Label(self.ventana , text="").grid(row=12, column=6, columnspan=6, padx=10 , sticky="EW")
         Label(self.ventana , text="").grid(row=13, column=6, columnspan=6, padx=10 , sticky="EW")
         Label(self.ventana , text="").grid(row=14, column=6, columnspan=6, padx=10 , sticky="EW")
        
         #linea 7
-        Entry(self.ventana, textvariable=self.validacions, justify="center",state="readonly", fg="red", **stile).grid(row=16, column=0, columnspan=4, rowspan=3, pady=10 , padx=10, sticky="EWSN" ) 
 
         
         Button(self.ventana,  text="Insertar", command=self.confirmar , **stile , background="#2ECC71", fg="white").grid(row = 16 , column= 4, columnspan=2, rowspan=3, pady=10 , padx=10, sticky="EWSN" ) 
        
         
-        
-        
-        
+        self.text_validacions = Text(
+            self.ventana, 
+            wrap="word",  
+            height=10,     
+            width=50,     
+            fg="red",     
+            font=stile["font"] 
+        )
+
+        self.text_validacions.grid(
+            row=16, column=0, columnspan=4, rowspan=10, pady=10, padx=10, sticky="EWSN"
+        )  
+
+        self.text_validacions.config(state="disabled")
+
+
     def confirmar(self):
        if self.validarCampos():
             emp = Empleado(
@@ -152,6 +165,9 @@ class Ventana_alta():
             print(emp)
             db = DataBase()
             db.insertar(emp)
+            
+            messagebox.showinfo("Insertado", "Empleado insertado con exito")
+            
 
        
        
@@ -162,53 +178,77 @@ class Ventana_alta():
         errores = []
 
         if not validador.validadorGeneral(self.apellido_nombre.get()):
-            errores.append("Apellido y Nombre")
+            errores.append("Apellido y Nombre ")
 
         if not validador.validadorFecha(self.fecha_nacimiento.get()):
-            errores.append("Fecha de Nacimiento")
+            errores.append("Fecha de Nacimiento ")
             
         if not validador.validadorFecha(self.fecha_inicio.get()):
-            errores.append("Fecha de Inicio")
+            errores.append("Fecha de Inicio ")
 
         if not validador.validadorGeneral(self.direccion.get()):
-            errores.append("Dirección")
+            errores.append("Dirección ")
 
         if not validador.validar_nif(self.nif.get()):
-            errores.append("NIF")
+            errores.append("NIF ")
 
         if not validador.validar_ccc(self.datos_bancarios.get()):
-            errores.append("Datos Bancarios")
+            errores.append("Datos Bancarios ")
 
         if not validador.validar_naf(self.numero_seguro_social.get()):
-            errores.append("Seguro Social")
+            errores.append("Seguro Social ")
             
         if not validador.validadorTelefono(self.telefono.get()):
-            errores.append("Teléfono")
+            errores.append("Teléfono ")
 
         if not validador.validaraSalario(self.salario_mensual.get()):
-            errores.append("Salario Mensual")
+            errores.append("Salario Mensual ")
 
         if not validador.validarGenero(self.genero.get()):
-            errores.append("Género")
+            errores.append("Género ")
 
         if not validador.validarEmail(self.email.get()):
-            errores.append("Email")
+            errores.append("Email ")
 
         if not validador.validadorGeneral(self.irpf.get()):
-            errores.append("IRPF")
+            errores.append("IRPF ")
 
-        if not validador.validadorGeneral(self.paga_extra.get()):
-            errores.append("Paga Extra")
+        if not validador.validador_paga_extra(self.paga_extra.get()):
+            errores.append("Paga Extra ")
 
         if not validador.validadorGeneral(self.seg_social.get()):
-            errores.append("Seguro Social")
+            errores.append("Seguro Social ")
 
         if errores:
-            mensaje_error = "\n".join(errores)
-            messagebox.showwarning("Validación de campos", mensaje_error)  
-            self.validacions.set(mensaje_error)
+            self.text_validacions.config(state="normal")
+            self.text_validacions.delete("1.0", "end")
+            for item in errores:
+                self.text_validacions.insert("end", f"{item}\n")
+                
+            self.text_validacions.config(state="disabled")    
             return False
         else:
             self.validacions.set("Todos los campos son válidos.")
-            messagebox.showinfo("Empleado insertado")
             return True
+        
+        
+    def reset_campos(self):
+        self.apellido_nombre.set("")
+        self.salario_mensual.set("")
+        self.telefono.set("")
+        self.email.set("")
+        self.fecha_nacimiento.set("")
+        self.fecha_inicio.set("")
+        self.direccion.set("")
+        self.nif.set("")
+        self.datos_bancarios.set("")
+        self.numero_seguro_social.set("")
+        self.genero.set("")
+        self.departamento.set("")
+        self.puesto.set("")
+        self.paga_extra.set("")
+        self.irpf.set("")
+        self.seg_social.set("")
+        self.validacions.set("")
+        
+    
